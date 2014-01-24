@@ -240,3 +240,52 @@ func TestGet(t *testing.T) {
 		t.Error("Error should be Index Out of Bounds", _err)
 	}
 }
+
+func TestConcat(t *testing.T) {
+	numbers := new(linkedlist.LinkedList)
+	numbers.Append(2)
+	numbers.Append(3)
+	numbers.Append(4)
+	numbers.Append(5)
+	numbers.Append(6)
+	numbers.Append(7)
+	numbers.Append(34)
+	numbers.Prepend(100)
+
+	words := new(linkedlist.LinkedList)
+	words.Append("Hola")
+	words.Append("Golang")
+	words.Prepend("Last")
+
+	numbers.Concat(words)
+
+	if numbers.Size != 11 {
+		t.Error("List Size should be the sum of both list")
+	}
+
+	if numbers.Head.Value != 100 {
+		t.Error("List Head should be numbers head")
+	}
+
+	if numbers.Node.Value != "Golang" {
+		t.Error("List Tails should be words tail")
+	}
+
+	words.Clear()
+
+	if numbers.Size != 11 {
+		t.Error("List Size should be the sum of both list")
+	}
+
+	if numbers.Head.Value != 100 {
+		t.Error("List Head should be numbers head")
+	}
+
+	if numbers.Node.Value != "Golang" {
+		t.Error("List Tails should be words tail")
+	}
+
+	if words.Size != 0 || words.Head != nil || words.Node != nil {
+		t.Error("List should be empty", words.Size, words.Head, words.Node)
+	}
+}

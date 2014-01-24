@@ -117,3 +117,9 @@ func (list *LinkedList) Get(index int32) (*Node, error) {
 	}
 	return node, nil
 }
+
+func (list *LinkedList) Concat(otherList *LinkedList) {
+	list.Node.NextNode = otherList.Head
+	list.Node = otherList.Node
+	list.Size += otherList.Size
+}
