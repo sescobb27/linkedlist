@@ -32,7 +32,7 @@ func TestAppend(t *testing.T) {
 	}
 }
 
-func TestEach(t *testing.T) {
+func TestMap(t *testing.T) {
 	list := new(linkedlist.LinkedList)
 	list.Append(2)
 	list.Append(5)
@@ -48,7 +48,7 @@ func TestEach(t *testing.T) {
 			t.Error("can't convert to strings ", str_v, ok)
 		}
 	}
-	list.Each(to_s)
+	list.Map(to_s)
 	if counter != 3 {
 		t.Error("counter should be 3")
 	}
@@ -154,16 +154,22 @@ func TestFind(t *testing.T) {
 	node, ok := list.Find(2)
 	if !ok || node == nil {
 		t.Error("Node shouldn't be nil and Ok should be true")
+	} else if node.Value != 2 {
+		t.Error("Error node value should be", 2)
 	}
 
 	node, ok = list.Find(5)
 	if !ok || node == nil {
 		t.Error("Node shouldn't be nil and Ok should be true")
+	} else if node.Value != 5 {
+		t.Error("Error node value should be", 5)
 	}
 
 	node, ok = list.Find(100)
 	if !ok || node == nil {
 		t.Error("Node shouldn't be nil and Ok should be true")
+	} else if node.Value != 100 {
+		t.Error("Error node value should be", 100)
 	}
 
 	node, ok = list.Find(500)
@@ -187,5 +193,50 @@ func TestClear(t *testing.T) {
 
 	if list.Size != 0 || list.Head != nil || list.Node != nil {
 		t.Error("List should be empty", list.Size, list.Head, list.Node)
+	}
+}
+
+func TestGet(t *testing.T) {
+	list := new(linkedlist.LinkedList)
+	list.Append(2)
+	list.Append("Hola")
+	list.Append(4)
+	list.Append("Golang")
+	list.Append(6)
+	list.Append(7)
+	list.Append(34)
+	list.Prepend("Last")
+
+	// first item
+	node, _err := list.Get(0)
+	if node == nil || _err != nil {
+		t.Error("Item not found", _err)
+	} else if node.Value != "Last" {
+		t.Error("Value should be", "Last")
+	}
+	// middle node
+	node, _err = list.Get(1)
+	if node == nil || _err != nil {
+		t.Error("Item not found", _err)
+	} else if node.Value != 2 {
+		t.Error("Value should be", 2, node.Value)
+	}
+	node, _err = list.Get(4)
+	if node == nil || _err != nil {
+		t.Error("Item not found", _err)
+	} else if node.Value != "Golang" {
+		t.Error("Value should be", "Golang", node.Value)
+	}
+	// last node
+	node, _err = list.Get(7)
+	if node == nil || _err != nil {
+		t.Error("Item not found", _err)
+	} else if node.Value != 34 {
+		t.Error("Value should be", 34)
+	}
+	// index out of bounds
+	node, _err = list.Get(9)
+	if node != nil || _err == nil {
+		t.Error("Error should be Index Out of Bounds", _err)
 	}
 }

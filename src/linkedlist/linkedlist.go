@@ -42,13 +42,19 @@ func (list *LinkedList) Append(item Item) {
 	}
 }
 
-func (list *LinkedList) Each(f func(node *Node)) {
+func (list *LinkedList) Each(f func(node Node)) {
+	for node := list.Head; node != nil; node = node.NextNode {
+		f(*node)
+	}
+}
+
+func (list *LinkedList) Map(f func(node *Node)) {
 	for node := list.Head; node != nil; node = node.NextNode {
 		f(node)
 	}
 }
 
-func (list *LinkedList) Find(item Item) (Item, bool) {
+func (list *LinkedList) Find(item Item) (*Node, bool) {
 	for node := list.Head; node != nil; node = node.NextNode {
 		if node.Value == item {
 			return node, true
@@ -78,7 +84,7 @@ func (list *LinkedList) Remove(item Item) error {
 			last_item = node
 		}
 	}
-	list.Each(if_exist_remove)
+	list.Map(if_exist_remove)
 	var itemError error
 	if !remove {
 		itemError = errors.New("Item not found")
@@ -90,4 +96,24 @@ func (list *LinkedList) Clear() {
 	list.Size = 0
 	list.Head = nil
 	list.Node = nil
+}
+
+func (list *LinkedList) Get(index int32) (*Node, error) {
+	if list.Size <= index {
+		return nil, errors.New("Index out of bounds")
+	} else if list.Size == index {
+		return list.Node, nil
+	} else if index == 0 {
+		return list.Head, nil
+	}
+	var count int32 = 0
+	var node *Node
+	for node = list.Head; node != nil; node = node.NextNode {
+		if count == index {
+			return node, nil
+		} else {
+			count++
+		}
+	}
+	return node, nil
 }
